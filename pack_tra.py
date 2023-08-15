@@ -234,7 +234,7 @@ def stayPointNew(trajectory, distance, time):
         while j < lenTrajectory:
             flag = 0
             if float(geo_distance(stayPointLat, stayPointLng, trajectory[j][0], trajectory[j][1])) < distance:
-                if dis_time(stayPointTime, trajectory[j][2]) > time:
+                if dis_time(stayPointTime, trajectory[j][2]) < time:
                     flag = 1
                     tra_tmp.append((trajectory[j][0], trajectory[j][1], trajectory[j][2], trajectory[j][3]))
                     latTmp = 0.0
@@ -242,8 +242,8 @@ def stayPointNew(trajectory, distance, time):
                     for k in range(len(tra_tmp)):
                         latTmp += tra_tmp[k][0]
                         lngTmp += tra_tmp[k][1]
-                    stayPointLat = latTmp
-                    stayPointLng = lngTmp
+                    stayPointLat = latTmp / len(tra_tmp)
+                    stayPointLng = lngTmp / len(tra_tmp)
 
                     j += 1
 
@@ -329,6 +329,18 @@ def addNoiseToTrueCoordinate(trueTrajectory):
         lat, lng = coordinateTranslate(trueTrajectory_[0], trueTrajectory_[1], r, theta)
         fakeTrajectory.append((lat, lng))
     return fakeTrajectory
+
+# 将json文件中的轨迹坐标读出来
+def getJsonCoordinate(path):
+    coordinate = []
+    oriCoordinate = load_json(path)
+    for oriCoordinate_ in oriCoordinate:
+        # print(oriCoordinate_)
+        lat = oriCoordinate_['stayLat']
+        lng = oriCoordinate_['stayLng']
+        coordinate.append((lat, lng))
+
+    return coordinate
 
 
 
