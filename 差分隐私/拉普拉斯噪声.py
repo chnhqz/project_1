@@ -91,6 +91,101 @@ def experimentEpsilon():
     draw_x_y(epsilons, distance)
 
 
+# 计算停留点
+# def stayPoint(trajectory, distance, time):
+#     '''
+#     :param trajectory: 轨迹 ([lat, lng, time, id])
+#     :param distance: 停留点距离阈值
+#     :param time: 停留点时间阈值
+#     :return: 停留点，所有停留点的集合，用来显示都哪些原始节点构成了该停留点
+#     '''
+#     stayPoint = [] # 用来存储停留点信息
+#     '''
+#     stayPoint : {
+#         stayId:
+#         stayLat:
+#         stayLng:
+#         StayTime:
+#         sonPoint:
+#     }
+#     '''
+#     tra_tmp = []
+#     lenTrajectory = len(trajectory)
+#     pointAttribute = []  # 用json文件存储所有位置点的性质
+#
+#     i = 0
+#     countId = 0
+#
+#     while i < lenTrajectory:
+#         tra_tmp.append((trajectory[i][0], trajectory[i][1], trajectory[i][2], trajectory[i][3]))
+#         j = i + 1
+#         stay = (trajectory[i][0], trajectory[i][1], trajectory[i][2])
+#         while j < lenTrajectory:
+#             flag = 0
+#             if float(geo_distance(stay[0], stay[1], trajectory[j][0], trajectory[j][1])) < distance:
+#                 if dis_time(stay[3], trajectory[j][2]) > time:
+#                     flag = 1
+#                     tra_tmp.append((trajectory[j][0], trajectory[j][1], trajectory[j][2], trajectory[j][3]))
+#                     latTmp = 0.0
+#                     lngTmp = 0.0
+#                     for k in range(len(tra_tmp)):
+#                         latTmp += tra_tmp[k][0]
+#                         lngTmp += tra_tmp[k][1]
+#                     stay[0] = latTmp
+#                     stay[1] = lngTmp
+#
+#
+#             j += 1
+#             if flag == 0:
+#                 sonPoint = []
+#                 stayTime = dis_time(tra_tmp[0][2], tra_tmp[len(tra_tmp) - 1][2])
+#                 for k in range(len(tra_tmp)):
+#                     sonPoint.append((tra_tmp[k][3], tra_tmp[k][0], tra_tmp[k][1], stayTime))
+#                     pointAttributeTmp = {
+#                         'id': tra_tmp[k][3],
+#                         'lat': tra_tmp[k][0],
+#                         'lng': tra_tmp[k][0],
+#                         'stayPoint': 'True',
+#                         'stayTime': stayTime
+#                     }
+#                     pointAttribute.append(pointAttributeTmp)
+#                 stayPointTmp = {
+#                     'stayId' : countId,
+#                     'stayLat' : stay[0],
+#                     'stayLng' : stay[1],
+#                     'stayTime' : stayTime,
+#                     'sonPoint' : sonPoint,
+#                 }
+#                 stayPoint.append(stayPointTmp)
+#                 countId += 1
+#                 tra_tmp = []
+#             if len(tra_tmp) == 0:
+#                 break
+#
+#         i = j
+#
+#     return stayPoint, pointAttribute
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 基于拉普拉斯分布的特性，如果想要分布震荡较小，需要将隐私预算epsilon的值设置较大
 if __name__ == '__main__':
