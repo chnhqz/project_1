@@ -246,30 +246,43 @@ def stayPointNew(trajectory, distance, time):
                     stayPointLng = lngTmp / len(tra_tmp)
 
                     j += 1
-
+            # if len(tra_tmp) == 1 and flag == 0:
+            #     pointAttributeTmp = {
+            #         'id': tra_tmp[0][3],
+            #         'lat': tra_tmp[0][0],
+            #         'lng': tra_tmp[0][1],
+            #         'stayPoint': 'False',
+            #         'stayTime': 0
+            #     }
+            #     pointAttribute.append(pointAttributeTmp)
 
             if flag == 0:
                 sonPoint = []
                 stayTime = dis_time(tra_tmp[len(tra_tmp) - 1][2], tra_tmp[0][2])    # 计算在一个停留点团内的停留时间
+                stayPointFlag = "True"
+                if len(tra_tmp) == 1:
+                    stayPointFlag = "False"
+                    stayTime = 0
                 for k in range(len(tra_tmp)):
                     sonPoint.append((tra_tmp[k][3], tra_tmp[k][0], tra_tmp[k][1], stayTime))
                     pointAttributeTmp = {
                         'id': tra_tmp[k][3],
                         'lat': tra_tmp[k][0],
                         'lng': tra_tmp[k][1],
-                        'stayPoint': 'True',
+                        'stayPoint': stayPointFlag,
                         'stayTime': stayTime
                     }
                     pointAttribute.append(pointAttributeTmp)
-                stayPointTmp = {
-                    'stayId' : countId,
-                    'stayLat' : stayPointLat,
-                    'stayLng' : stayPointLng,
-                    'stayTime' : stayTime,
-                    'sonPoint' : list(sonPoint),
-                }
-                stayPoint.append(stayPointTmp)
-                countId += 1
+                if len(tra_tmp) >= 5:
+                    stayPointTmp = {
+                        'stayId' : countId,
+                        'stayLat' : stayPointLat,
+                        'stayLng' : stayPointLng,
+                        'stayTime' : stayTime,
+                        'sonPoint' : list(sonPoint),
+                    }
+                    stayPoint.append(stayPointTmp)
+                    countId += 1
                 tra_tmp = []
             if len(tra_tmp) == 0:
                 break

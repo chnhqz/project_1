@@ -22,18 +22,18 @@ tra = pack_tra.traToTrajectory(tra)
 startTime = time.time()
 
 # Stay, traAllStay, pointAttribute = pack_tra.stay_point(tra, 100, 1800)
-# stayPoint, pointAttribute = pack_tra.stayPointNew(tra, 200, 1800)
+stayPoint, pointAttribute = pack_tra.stayPointNew(tra, 100, 1800)
 # pack_tra.drawTrajectory1(tra, Stay)
 
 # fakeTrajectory = pack_tra.addNoiseToTrueCoordinate(tra)
 #
 # pack_tra.drawTrajectory1(tra, fakeTrajectory)
 
-# print("共有{}个停留点".format(len(stayPoint)))
+print("共有{}个停留点".format(len(stayPoint)))
 # print("共有{}个停留点".format(len(Stay)))
 
-# pack_tra.save_json("jsonData/stayPoint.json", stayPoint)
-# pack_tra.save_json("jsonData/pointAttribute.json", pointAttribute)
+pack_tra.save_json("jsonData/stayPoint.json", stayPoint)
+pack_tra.save_json("jsonData/pointAttribute.json", pointAttribute)
 endTime = time.time()
 
 print("共用时:{}s".format(endTime - startTime))
