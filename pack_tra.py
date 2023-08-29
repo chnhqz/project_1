@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from geopy.distance import geodesic
 import json
 import math
-import numpy
+import numpy as np
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 import random
@@ -136,6 +136,37 @@ def traToTrajectory(tra):
         trajectory.append((float(tra_[0]), float(tra_[1]), tra_[4], id))
         id = id + 1
     return trajectory
+
+# 将轨迹数据集改为适合k-means聚类方法的数据
+def traToKMeans(tra):
+    '''
+    :param tra:  原始轨迹数据集([lat, lng, high, date, time])
+    :return: array:[[lat, lng]]
+    '''
+    count = 0
+    arrayTmp = []
+    for tra_ in tra:
+        count += 1
+        if count % 10 == 0:
+            arrayTmp.append((float(tra_[0]), float(tra_[1])))
+    return np.array(arrayTmp)
+
+def allTraToKmeans(allTra):
+    '''
+    :param allTra: 单个用户所有轨迹数据集
+    :return: array:[[lat, lng]]
+    '''
+    arrayTmp = []
+
+    count = 0
+    for i in range(len(allTra)):
+        tra = allTra[i]
+        for tra_ in tra:
+            count += 1
+            if count % 50 == 0:
+                arrayTmp.append((float(tra_[0]), float(tra_[1])))
+    return np.array(arrayTmp)
+
 
 
 # 计算停留点
@@ -354,6 +385,12 @@ def getJsonCoordinate(path):
         coordinate.append((lat, lng))
 
     return coordinate
+
+# 用户子串生成
+
+
+
+# 所有用户字串生成
 
 
 

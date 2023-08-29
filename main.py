@@ -1,6 +1,8 @@
 import pack_tra
 import os
 import time
+import k_means
+
 
 path = os.getcwd() + "//data"
 user = "000"
@@ -11,6 +13,7 @@ print("用户{}共有{}条轨迹数据".format(user, len(tra)))
 
 tra = tra[100]
 print("轨迹包含{}个轨迹点".format(len(tra)))
+
 
 # pack_tra.drawTrajectory(tra)
 # for k in range(1, len(tra)):
@@ -25,9 +28,9 @@ startTime = time.time()
 stayPoint, pointAttribute = pack_tra.stayPointNew(tra, 100, 1800)
 # pack_tra.drawTrajectory1(tra, Stay)
 
-# fakeTrajectory = pack_tra.addNoiseToTrueCoordinate(tra)
+fakeTrajectory = pack_tra.addNoiseToTrueCoordinate(tra)
 #
-# pack_tra.drawTrajectory1(tra, fakeTrajectory)
+pack_tra.drawTrajectory1(tra, fakeTrajectory)
 
 print("共有{}个停留点".format(len(stayPoint)))
 # print("共有{}个停留点".format(len(Stay)))

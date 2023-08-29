@@ -32,10 +32,9 @@ for item in plts_000:
                 date.append(item_list[5])
                 time.append(item_list[6])
                 tra.append((item_list[0], item_list[1], item_list[3], item_list[5], item_list[6]))
-
-
-
 print("共有{}条数据".format(len(lat)))
+
+
 
 str_time = tra[0][3]
 lat_0 = []
