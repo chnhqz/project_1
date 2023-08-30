@@ -26,9 +26,11 @@ def loadData(path, user):
     path = path + "//" + user + "//Trajectory"
     plts = os.scandir(path)
     for item in plts:
+        # 这里边item是指文件夹内的文件
         path_item = path + "//" + item.name  # 文件夹内每一个子文件的绝对路径
         with open(path_item, 'r+') as fp:
             for item in fp.readlines():
+                # 这里是打开了单个文件内每一行数据
                 item_list = item.split(',')
                 if len(item_list) < 7:
                     continue
@@ -40,6 +42,7 @@ def loadData(path, user):
                     date.append(item_list[5])
                     time.append(item_list[6])
                     loc.append((item_list[0], item_list[1], item_list[3], item_list[5], item_list[6]))
+                    # loc指的是当个文件内的所有轨迹数据点
             tra.append(loc)
     return tra, loc
 
@@ -146,9 +149,9 @@ def traToKMeans(tra):
     count = 0
     arrayTmp = []
     for tra_ in tra:
-        count += 1
-        if count % 10 == 0:
-            arrayTmp.append((float(tra_[0]), float(tra_[1])))
+        # count += 1
+        # if count % 10 == 0:
+        arrayTmp.append((float(tra_[0]), float(tra_[1])))
     return np.array(arrayTmp)
 
 def allTraToKmeans(allTra):
@@ -230,7 +233,6 @@ def stay_point(trajectory, distance, time):
     return Stay, traAllStay, pointAttribute
 
 # 新的计算停留点方法
-
 # 计算停留点
 def stayPointNew(trajectory, distance, time):
     '''
@@ -277,15 +279,6 @@ def stayPointNew(trajectory, distance, time):
                     stayPointLng = lngTmp / len(tra_tmp)
 
                     j += 1
-            # if len(tra_tmp) == 1 and flag == 0:
-            #     pointAttributeTmp = {
-            #         'id': tra_tmp[0][3],
-            #         'lat': tra_tmp[0][0],
-            #         'lng': tra_tmp[0][1],
-            #         'stayPoint': 'False',
-            #         'stayTime': 0
-            #     }
-            #     pointAttribute.append(pointAttributeTmp)
 
             if flag == 0:
                 sonPoint = []
@@ -306,11 +299,11 @@ def stayPointNew(trajectory, distance, time):
                     pointAttribute.append(pointAttributeTmp)
                 if len(tra_tmp) >= 5:
                     stayPointTmp = {
-                        'stayId' : countId,
-                        'stayLat' : stayPointLat,
-                        'stayLng' : stayPointLng,
-                        'stayTime' : stayTime,
-                        'sonPoint' : list(sonPoint),
+                        'stayId': countId,
+                        'stayLat': stayPointLat,
+                        'stayLng': stayPointLng,
+                        'stayTime': stayTime,
+                        'sonPoint': list(sonPoint),
                     }
                     stayPoint.append(stayPointTmp)
                     countId += 1
@@ -385,6 +378,38 @@ def getJsonCoordinate(path):
         coordinate.append((lat, lng))
 
     return coordinate
+
+
+# 读取用户轨迹点信息
+
+def loadPoint1(path):
+    coor = []
+    oriCoordinate = load_json(path)
+    for oriCoordinate_ in oriCoordinate:
+        id = oriCoordinate_['id']
+        lat = oriCoordinate_['lat']
+        lng = oriCoordinate_['lng']
+        staypoint = 1 if oriCoordinate_['stayPoint'] == "True" else 0
+        staytime = oriCoordinate_['stayTime']
+        coor.append((id, lat, lng, staypoint, staytime))
+
+    return coor
+
+# 读取用户轨迹点频率信息
+
+def loadPoint2(path):
+    coor = []
+    oriCoordinate = load_json(path)
+
+    for oriCoordinate_ in oriCoordinate:
+        id = oriCoordinate_['id']
+        lat = oriCoordinate_['lat']
+        lng = oriCoordinate_['lng']
+        frequency = oriCoordinate_['frequency']
+        coor.append((id, lat, lng, frequency))
+
+    return coor
+
 
 # 用户子串生成
 
