@@ -354,6 +354,10 @@ def coordinateTranslate(lat, lng, dis, theta):
 
 # 对不同的坐标点计算不同的epsilon
 def computeDifferentEpsilon(truePoint):
+
+
+
+
     return random.uniform(1000, 2000)
 
 # 对读取到的用户真实轨迹添加噪声生成虚假轨迹
