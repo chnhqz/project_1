@@ -316,6 +316,83 @@ def stayPointNew(trajectory, distance, time):
     return stayPoint, pointAttribute
 
 
+# 将停留点存储为txt格式
+
+def stayPointTxt(trajectory, distance, time):
+    '''
+    :param trajectory: 轨迹 ([lat, lng, time, id])
+    :param distance: 停留点距离阈值
+    :param time: 停留点时间阈值
+    :return: 停留点，所有停留点的集合，用来显示都哪些原始节点构成了该停留点
+    '''
+    stayPoint = [] # 用来存储停留点信息
+    '''
+    stayPoint : {
+        stayId:
+        stayLat:
+        stayLng:
+        StayTime:
+        sonPoint:
+    }
+    '''
+    tra_tmp = []
+    lenTrajectory = len(trajectory)
+    pointAttribute = []  # 用json文件存储所有位置点的性质
+
+    i = 0
+    countId = 0
+
+    while i < lenTrajectory:
+        tra_tmp.append((trajectory[i][0], trajectory[i][1], trajectory[i][2], trajectory[i][3]))
+        j = i + 1
+        stayPointLat = float(trajectory[i][0])
+        stayPointLng = float(trajectory[i][1])
+        stayPointTime = trajectory[i][2]
+        while j < lenTrajectory:
+            flag = 0
+            if float(geo_distance(stayPointLat, stayPointLng, trajectory[j][0], trajectory[j][1])) < distance:
+                if dis_time(stayPointTime, trajectory[j][2]) < time:
+                    flag = 1
+                    tra_tmp.append((trajectory[j][0], trajectory[j][1], trajectory[j][2], trajectory[j][3]))
+                    latTmp = 0.0
+                    lngTmp = 0.0
+                    for k in range(len(tra_tmp)):
+                        latTmp += tra_tmp[k][0]
+                        lngTmp += tra_tmp[k][1]
+                    stayPointLat = latTmp / len(tra_tmp)
+                    stayPointLng = lngTmp / len(tra_tmp)
+
+                    j += 1
+
+            if flag == 0:
+                stayTime = dis_time(tra_tmp[len(tra_tmp) - 1][2], tra_tmp[0][2])    # 计算在一个停留点团内的停留时间
+                stayPointFlag = 1
+                if len(tra_tmp) == 1:
+                    stayPointFlag = 0
+                    stayTime = 0
+                for k in range(len(tra_tmp)):
+                    pointAttribute.append((tra_tmp[k][3], tra_tmp[k][0], tra_tmp[k][1], stayPointFlag, stayTime))
+                if len(tra_tmp) >= 5:
+                    stayPoint.append((countId, stayPointLat, stayPointLng, stayTime))
+                    countId += 1
+                tra_tmp = []
+            if len(tra_tmp) == 0:
+                break
+        i = j
+
+    return stayPoint, pointAttribute
+
+
+# 将数据存储到txt文件内
+
+def savetxt(save_path, data):
+    with open(save_path, 'w') as f:
+        for data_ in data:
+            strAll = str(data_[0]) + " " + str(data_[1]) + " " + str(data_[2]) + " " + str(data_[3]) + "\n"
+            f.write(strAll)
+
+
+
 
 # 将数据存储为json文件
 def save_json(save_path, data):

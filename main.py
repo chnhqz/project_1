@@ -38,11 +38,21 @@ startTime = time.time()
 
 # pack_tra.save_json("jsonData/stayPoint_000_0.json", stayPoint)
 # pack_tra.save_json("jsonData/pointAttribute_000_0.json", pointAttribute)
+
+# 计算停留点信息，并将其存储到txt文件内
+
+stayPoint, pointAttribute = pack_tra.stayPointTxt(tra, 100, 1800)
+pack_tra.savetxt("./txtData/stayPoint.txt", stayPoint)
+pack_tra.savetxt("./txtData/pointAttribute.txt", pointAttribute)
+# print("有{}个停留点".format(len(stayPoint)))
+
+
+
 endTime = time.time()
 
 print("共用时:{}s".format(endTime - startTime))
 
-coordinate = pack_tra.getJsonCoordinate("./jsonData/stayPoint_000_0.json")
+# coordinate = pack_tra.getJsonCoordinate("./jsonData/stayPoint_000_0.json")
 # pack_tra.drawTrajectory1(tra, coordinate)
 # print(len(coordinate))
 
