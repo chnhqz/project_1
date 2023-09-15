@@ -44,6 +44,7 @@ def Location(stay, stay_senmantic, senmantic_threshold):
         for z in range(len(stay_senmantic[i])):
             locationtmp.append(float(stay_senmantic[i][z]))
         locationtmp_1.append(locationtmp)
+
         locationtmp = []
 
         # 下一个停留点语义特征向量
@@ -56,42 +57,41 @@ def Location(stay, stay_senmantic, senmantic_threshold):
 
             # locationtmp_1 临时存储位于一个语义位置的停留点集合
             for p in range(len(locationtmp_1)):
-                print(locationtmp[0])
+
                 # print(similar(locationtmp_1[p], stay_senmantic[j]))
                 # 如果stay_senmantic[j]和该语义位置内所有停留点的语义相似度都大于一定阈值，则他们所处同一语义位置
                 if similar(locationtmp_1[p], stay_senmantic[j]) > senmantic_threshold:
-
-                    locationtmp.append(j)
-                    for k in range(len(stay_senmantic[j])):
-                        locationtmp.append(stay_senmantic[j][k])
-                    locationtmp_1.append(locationtmp)
-                    locationtmp = []
-
                     continue
                 else:
                     flag = 0
                     break
+            if flag == 1:
+                locationtmp.append(j)
+                for k in range(len(stay_senmantic[j])):
+                    locationtmp.append(stay_senmantic[j][k])
+                locationtmp_1.append(locationtmp)
+                print(locationtmp)
+                locationtmp = []
 
-            if flag == 0 and len(locationtmp_1) >= 2:
-                flagLocation = countID
-                lat = 0.0
-                lng = 0.0
-                for j in range(len(locationtmp_1)):
-                    lat += stay[locationtmp_1[j][0]][1]
-                    lng += stay[locationtmp_1[j][0]][1]
-                    stayAttribute.append((locationtmp_1[j][0], stay[locationtmp_1[j][0]][1], stay[locationtmp_1[j][0]][1], flagLocation))
-                lat = lat / len(locationtmp_1)
-                lng = lng / len(locationtmp_1)
-                location.append((countID, lat, lng))
-                countID += 1
-                locationtmp_1 = []
-            if len(locationtmp_1) == 1:
-                stayAttribute.append((stay[j][0], stay[stay[j][0]][1], stay[stay[j][0]][2], flagLocation))
+        if flag == 0 and len(locationtmp_1) >= 2:
+            flagLocation = countID
+            lat = 0.0
+            lng = 0.0
+            for j in range(len(locationtmp_1)):
+                lat += stay[locationtmp_1[j][0]][1]
+                lng += stay[locationtmp_1[j][0]][1]
+                stayAttribute.append((locationtmp_1[j][0], stay[locationtmp_1[j][0]][1], stay[locationtmp_1[j][0]][1], flagLocation))
+            lat = lat / len(locationtmp_1)
+            lng = lng / len(locationtmp_1)
+            location.append((countID, lat, lng))
+            countID += 1
+            locationtmp_1 = []
+        if len(locationtmp_1) == 1:
+             stayAttribute.append((stay[j][0], stay[stay[j][0]][1], stay[stay[j][0]][2], flagLocation))
 
-        i = j + 1
+    i = j + 1
 
-
-        return location, stayAttribute
+    return location, stayAttribute
 
 
 
