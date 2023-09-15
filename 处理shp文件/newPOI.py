@@ -52,9 +52,12 @@ for i in range(len_data_stay_point):
     startTime = time.time()
     for j in range(len_POI_matrix):
         s = 1 + 1
-        # if POI_matrix[j][0] > 0.0:
-        #     if geo_distance(lat, lng, POI_matrix[j][0], POI_matrix[j][1]) <= r:
-        #         count[0] += 1
+        if POI_matrix[j][0] > 0.0:
+            if math.sqrt((lat - POI_matrix[j][0]) ** 2 + (lng - POI_matrix[j][1]) ** 2) <= r:
+                 count[0] += 1
+            # if geodesic((lat, lng), (POI_matrix[j][0], POI_matrix[j][1])).m <= r:
+            #     count[0] += 1
+            # s = s + 1
         #
         # if POI_matrix[j][2] > 0.0:
         #     if geo_distance(lat, lng, POI_matrix[j][2], POI_matrix[j][3]) <= r:
@@ -133,7 +136,7 @@ for i in range(len_data_stay_point):
         #     count[k] = 0
 
     endTime = time.time()
-    # print("完成第{}次计算,用时{}s,剩余{}次计算,预计用时{}h".format(i, endTime - startTime, len(data_stay_point) - i, (endTime * startTime) * (len(data_stay_point) - i) / 3600))
+    print("完成第{}次计算,用时{}s,剩余{}次计算,预计用时{}h".format(i, endTime - startTime, len(data_stay_point) - i, (endTime * startTime) * (len(data_stay_point) - i) / 3600))
 endTime1 = time.time()
 
 print("构建完成matrix！用时：{}".format(endTime1 - startTime1))

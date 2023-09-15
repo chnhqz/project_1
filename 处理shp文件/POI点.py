@@ -8,17 +8,7 @@ def geo_distance(lat1, lng1, lat2, lng2):
     distance = geodesic((lat1, lng1), (lat2, lng2)).m
     return distance
 
-def function_2(data_1, data_stay_point, r):
-    count = 0
-    for i in range(len(data_1)):
-        lat = data_1[i][0]
-        lng = data_1[i][1]
-        for j in range(len(data_stay_point)):
-            lat_1 = data_stay_point[j][0]
-            lng_1 = data_stay_point[j][1]
-            if geo_distance(lat, lng, lat_1, lng_1) <= r:
-                count += 1
-    return count
+
 
 # 读取POI兴趣点
 data_1 = np.genfromtxt("../txtData/POI/交通设施服务.txt", dtype=[float, float])  # 将文件中数据加载到data数组里
@@ -366,6 +356,18 @@ for i in range(len(data_stay_point)):
 
     matrix[i][18] = count
 
+
+def function_2(data_1, data_stay_point, r):
+    count = 0
+    for i in range(len(data_1)):
+        lat = data_1[i][0]
+        lng = data_1[i][1]
+        for j in range(len(data_stay_point)):
+            lat_1 = data_stay_point[j][0]
+            lng_1 = data_stay_point[j][1]
+            if geo_distance(lat, lng, lat_1, lng_1) <= r:
+                count += 1
+    return count
 
 
 matrix_1 = np.zeros((19, 1))
