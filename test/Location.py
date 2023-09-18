@@ -50,7 +50,6 @@ def Location(stay, stay_senmantic, senmantic_threshold):
         # 下一个停留点语义特征向量
         j = i + 1
         flag = 1
-        flagLocation = -1
         while j < len_stay_senmantic:
             # 停留点所处语义位置的ID
 
@@ -75,13 +74,13 @@ def Location(stay, stay_senmantic, senmantic_threshold):
                 locationtmp = []
                 j += 1
 
-            if flag == 0:
+            if flag == 0 or j == len_stay_senmantic:
                 flagLocation = countID
                 if len(locationtmp_1) == 1:
                     flagLocation = -1
 
                 for n in range(len(locationtmp_1)):
-                    stayAttribute.append((locationtmp_1[n][0], stay[locationtmp_1[n][0]][1], stay[locationtmp_1[n][0]][1], flagLocation))
+                    stayAttribute.append((locationtmp_1[n][0], stay[locationtmp_1[n][0]][1], stay[locationtmp_1[n][0]][2], flagLocation))
 
                 if len(locationtmp_1) >= 2:
 
@@ -89,7 +88,7 @@ def Location(stay, stay_senmantic, senmantic_threshold):
                     lng = 0.0
                     for n in range(len(locationtmp_1)):
                         lat += stay[locationtmp_1[n][0]][1]
-                        lng += stay[locationtmp_1[n][0]][1]
+                        lng += stay[locationtmp_1[n][0]][2]
 
                     lat = lat / len(locationtmp_1)
                     lng = lng / len(locationtmp_1)
@@ -98,12 +97,41 @@ def Location(stay, stay_senmantic, senmantic_threshold):
                 locationtmp_1 = []
             if len(locationtmp_1) == 0:
                 break
-
         i = j
 
     return location, stayAttribute
 
 
+# 绘制原始轨迹和停留点轨迹对比
+def drawTrajectory1(ori_truple, stay_truple):
+    plt.rcParams['font.sans-serif'] = ['SimHei']  # 正常显示中文标签
+    plt.rcParams['axes.unicode_minus'] = False  # 正常显示负号
+
+    colors = ['mistyrose', 'lightcoral', 'salmon', 'tomato', 'cyan', 'deepskyblue', 'red']
+
+    lat_ori = []
+    lng_ori = []
+    for tra_ in ori_truple:
+        lat_ori.append(float(tra_[1]))
+        lng_ori.append(float(tra_[2]))
+
+    lat_stay = []
+    lng_stay = []
+
+    for tra_ in stay_truple:
+        lat_stay.append(float(tra_[1]))
+        lng_stay.append(float(tra_[2]))
+
+
+    plt.title("轨迹测试")
+    plt.xlabel("维度-lat")
+    plt.ylabel("经度-lng")
+    plt.scatter(list(lat_stay), list(lng_stay), color='red')
+    plt.scatter(list(lat_ori), list(lng_ori), color='blue', alpha=0.5)
+    plt.plot(list(lat_stay), list(lng_stay), color='red', linewidth=2.5)
+    plt.plot(list(lat_ori), list(lng_ori), color='blue', linewidth=0.5)
+
+    plt.show()
 
 
 
@@ -114,19 +142,32 @@ if __name__ == '__main__':
     stay_semantic = np.genfromtxt("../oriData/000/end_poi.txt", dtype=[float, float, float, float, float, float, float, float, float, float,
                                                                            float, float, float, float, float, float, float, float, float])  # 将文件中数据加载到data数组里
     stay = np.genfromtxt("../oriData/000/stay.txt", dtype=[int, float, float, int , float])
-    # print(stay_semantic)
 
-    # vec1 = [1, 2, 3, 4, 5]
-    # vec2 = [3, 4, 5, 6, 7]
-    #
-    # print(similar(vec1, vec2))
+    location, stayAttribute = Location(stay, stay_semantic, 0.95)
 
 
-    location, stayAttribute = Location(stay, stay_semantic, 0.9)
-    print(len(location))
-    print(stayAttribute)
+
+    # print(len(location))
+    # print(stayAttribute)
+
+    with open('../oriData/000/location.txt', 'w') as f:
+        for i in range(len(location)):
+            loc_str = str(location[i][0]) + " " + str(location[i][1]) + " " + str(location[i][2]) + "\n"
+            f.write(loc_str)
+
+    with open('../oriData/000/stayAttribute.txt', 'w') as f:
+        for i in range(len(stayAttribute)):
+            loc_str = str(stayAttribute[i][0]) + " " + str(stayAttribute[i][1]) + " " + str(stayAttribute[i][2]) + " " + str(stayAttribute[i][3]) + "\n"
+            f.write(loc_str)
+
+    drawTrajectory1(stayAttribute, location)
 
 
+
+
+
+    # np.savetxt('../oriData/000\\' + 'location.txt', np.c_[location], fmt='%.10f', delimiter=' ')
+    # np.savetxt('../oriData/000\\' + 'stayAttribute.txt', np.c_[stayAttribute], fmt='%.10f', delimiter=' ')
 
 
 

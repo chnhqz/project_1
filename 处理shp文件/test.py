@@ -1,7 +1,7 @@
 import geopandas as gpd
 from matplotlib import pyplot as plt
 
-data = gpd.read_file(r'../POIdata/餐饮服务.shp')#读取磁盘上的矢量文件
+data = gpd.read_file(r'../POIdata/地名地址信息.shp')#读取磁盘上的矢量文件
 # data = gpd.read_file('shapefile/china.gdb', layer='province')#读取gdb中的矢量数据
 # print(data.crs)  # 查看数据对应的投影信息
 
@@ -30,7 +30,7 @@ for data_ in data.geometry:
     if lat >= 39.1 and lat <= 41.1 and lng >= 115.4 and lng <= 117.6:
         coordinate.append((lat, lng))
 
-with open("../txtData/POI/餐饮服务.txt", 'w') as f:
+with open("../txtData/POI/地名地址信息.txt", 'w') as f:
     for coordinate_ in coordinate:
         strAll = str(coordinate_[0]) + " " + str(coordinate_[1]) + "\n"
         f.write(strAll)
